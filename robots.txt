@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://manuelrivas2026.github.io/veneiatech/sitemap.xml
+Sitemap: https://veneiatech.de/sitemap.xml
