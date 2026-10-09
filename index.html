@@ -1047,6 +1047,10 @@ body.sub .sitebar{display:block}
       <p>Die Schriftarten sind direkt in die Website eingebunden. Es wird keine Verbindung zu Servern von Google Fonts oder anderen Schriftanbietern aufgebaut.</p>
       <h3>Kontaktformular und E-Mail</h3>
       <p>Wenn Sie das Kontaktformular absenden, werden Ihre Angaben verschlüsselt an unseren eigenen Server übertragen. Dort leitet eine selbst betriebene Automatisierungssoftware (n8n) die Anfrage per E-Mail an uns weiter. Der Server wird von der Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, betrieben und steht in Deutschland; mit Hetzner besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Falls die direkte Übertragung nicht möglich ist, öffnet sich stattdessen Ihr eigenes E-Mail-Programm mit Ihren Angaben; die Daten werden dann erst übermittelt, wenn Sie die E-Mail selbst absenden. Wir verarbeiten Ihre Angaben (Name, E-Mail-Adresse und, falls angegeben, Unternehmen, Telefonnummer, Branche, gewünschte Aufgaben und Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit Ihre Anfrage auf einen Vertrag abzielt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO. Ihre Daten werden gelöscht, sobald sie für die Bearbeitung nicht mehr erforderlich sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+      <h3>KI-Chat „Lina“</h3>
+      <p>Auf unserer Website können Sie mit Lina chatten, einer KI-Assistentin. Lina ist ein automatisiertes System und kein Mensch; ihre Antworten können Fehler enthalten. Die Nutzung ist freiwillig. Bitte geben Sie im Chat keine sensiblen Daten ein.</p>
+      <p>Ihre Nachrichten werden verschlüsselt an unseren eigenen Server (Hetzner Online GmbH, Deutschland) übertragen und dort von unserer selbst betriebenen Automatisierungssoftware (n8n) verarbeitet. Um die Antworten zu erzeugen, werden die Nachrichten an den KI-Dienst Claude der Anthropic PBC (USA) übermittelt, die als Auftragsverarbeiter tätig ist. Für die Übermittlung in die USA gelten die EU-Standardvertragsklauseln, die Bestandteil des Auftragsverarbeitungsvertrags mit Anthropic sind. Anthropic löscht Ein- und Ausgaben nach eigenen Angaben standardmäßig innerhalb von 30 Tagen.</p>
+      <p>In Ihrem Browser werden eine zufällige Sitzungskennung und der Gesprächsverlauf nur für die Dauer der Sitzung gespeichert (Session Storage) und beim Schließen des Tabs gelöscht. Auf unserem Server werden die Verarbeitungsprotokolle nach spätestens 14 Tagen automatisch gelöscht. Wenn Sie Lina Ihre Kontaktdaten mitteilen, erhalten wir diese zusammen mit einer Zusammenfassung Ihres Anliegens per E-Mail, um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit Ihre Anfrage auf einen Vertrag abzielt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO (unser berechtigtes Interesse an der Beantwortung von Anfragen).</p>
       <h3>E-Mail-Dienst</h3>
       <p>Die Domain veneiatech.de und die Weiterleitung unserer E-Mail-Adresse info@veneiatech.de werden von der INWX GmbH, Prinzessinnenstr. 30, 10969 Berlin, bereitgestellt. E-Mails an diese Adresse – einschließlich der Nachrichten aus dem Kontaktformular – werden an unser Postfach bei Gmail weitergeleitet, einem Dienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Dabei kann eine Übermittlung von Daten an die Google LLC in den USA nicht ausgeschlossen werden; die Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert.</p>
       <h3>WhatsApp</h3>
@@ -1738,5 +1742,95 @@ setLang("de");orbit();
 reduce?finish():play();
 go(location.hash.slice(1));
 </script>
+<!-- ============ Lina · KI-Assistentin (Chat) ============ -->
+<style>
+#lina-launch{position:fixed;right:22px;bottom:22px;z-index:70;display:flex;align-items:center;gap:10px;height:52px;padding:0 20px 0 8px;border-radius:999px;border:1px solid rgba(158,231,255,.28);background:rgba(8,14,30,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:var(--platinum,#E9EEF6);font:500 15px/1 'Geist',system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 40px rgba(47,107,255,.25);transition:transform .3s,box-shadow .3s}
+#lina-launch:hover{transform:translateY(-2px);box-shadow:0 14px 48px rgba(47,107,255,.4)}
+#lina-launch .lina-av{width:36px;height:36px}
+.lina-av{flex:none;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#9EE7FF,#2F6BFF 70%);color:#02040A;font:600 16px/1 'Geist',system-ui,sans-serif;box-shadow:0 0 18px rgba(158,231,255,.45)}
+#lina-launch .lina-dot{width:8px;height:8px;border-radius:50%;background:#3CE6A0;box-shadow:0 0 8px #3CE6A0}
+#lina-panel{position:fixed;right:22px;bottom:86px;z-index:71;width:380px;max-width:calc(100vw - 32px);height:min(580px,calc(100vh - 120px));display:flex;flex-direction:column;border-radius:22px;overflow:hidden;border:1px solid rgba(158,231,255,.2);background:rgba(4,8,20,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(47,107,255,.08);color:var(--platinum,#E9EEF6);font:400 14.5px/1.5 'Geist',system-ui,sans-serif;opacity:0;transform:translateY(14px) scale(.98);pointer-events:none;transition:opacity .25s,transform .25s}
+#lina-panel.open{opacity:1;transform:none;pointer-events:auto}
+.lina-head{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;border-bottom:1px solid rgba(158,231,255,.12)}
+.lina-head .lina-av{width:38px;height:38px}
+.lina-head b{display:block;font-weight:600;font-size:15px}
+.lina-head small{color:var(--steel,#8A97AE);font-size:12.5px}
+.lina-x{margin-inline-start:auto;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.06);color:inherit;cursor:pointer;font-size:18px;line-height:1}
+.lina-x:hover{background:rgba(255,255,255,.12)}
+.lina-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.lina-m{max-width:84%;padding:10px 14px;border-radius:16px;white-space:pre-wrap;word-wrap:break-word;unicode-bidi:plaintext;text-align:start}
+.lina-m a{color:var(--ice,#9EE7FF)}
+.lina-m.bot{align-self:flex-start;background:rgba(158,231,255,.08);border:1px solid rgba(158,231,255,.12);border-end-start-radius:6px}
+.lina-m.me{align-self:flex-end;background:var(--platinum,#E9EEF6);color:#02040A;border-end-end-radius:6px}
+.lina-m.me a{color:#2F6BFF}
+.lina-typing{align-self:flex-start;display:flex;gap:5px;padding:12px 14px;border-radius:16px;background:rgba(158,231,255,.08)}
+.lina-typing i{width:7px;height:7px;border-radius:50%;background:var(--ice,#9EE7FF);opacity:.4;animation:linaDot 1.2s infinite}
+.lina-typing i:nth-child(2){animation-delay:.2s}.lina-typing i:nth-child(3){animation-delay:.4s}
+@keyframes linaDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.lina-form{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(158,231,255,.12)}
+.lina-form textarea{flex:1;resize:none;max-height:110px;min-height:44px;padding:11px 14px;border-radius:14px;border:1px solid rgba(158,231,255,.18);background:rgba(255,255,255,.04);color:inherit;font:inherit;outline:none}
+.lina-form textarea:focus{border-color:rgba(158,231,255,.5)}
+.lina-send{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--platinum,#E9EEF6);color:#02040A;cursor:pointer;display:grid;place-items:center}
+.lina-send:disabled{opacity:.4;cursor:default}
+.lina-send svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+[dir=rtl] .lina-send svg{transform:scaleX(-1)}
+.lina-note{padding:0 14px 12px;color:var(--steel,#8A97AE);font-size:11.5px;line-height:1.4}
+.lina-note a{color:inherit;text-decoration:underline}
+@media (max-width:520px){#lina-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0}#lina-launch{right:16px;bottom:16px}body.lina-open #lina-launch{display:none}}
+@media (prefers-reduced-motion:reduce){#lina-panel,#lina-launch{transition:none}.lina-typing i{animation:none}}
+</style>
+<button id="lina-launch" type="button" aria-controls="lina-panel" aria-expanded="false"><span class="lina-av" aria-hidden="true">L</span><span id="lina-launch-t">Mit Lina chatten</span><span class="lina-dot" aria-hidden="true"></span></button>
+<section id="lina-panel" role="dialog" aria-modal="false" aria-labelledby="lina-name" hidden>
+  <div class="lina-head"><span class="lina-av" aria-hidden="true">L</span><div><b id="lina-name">Lina</b><small id="lina-sub">KI-Assistentin von Veneiatech</small></div><button class="lina-x" type="button" id="lina-close" aria-label="Schließen">×</button></div>
+  <div class="lina-msgs" id="lina-msgs" aria-live="polite"></div>
+  <form class="lina-form" id="lina-form"><textarea id="lina-in" dir="auto" rows="1" maxlength="1000" aria-label="Nachricht"></textarea><button class="lina-send" type="submit" id="lina-send" aria-label="Senden"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
+  <p class="lina-note" id="lina-note"></p>
+</section>
+<script>
+(()=>{
+const EP="https://n8n.veneiatech.de/webhook/lina-chat";
+const TX={
+ de:{launch:"Mit Lina chatten",sub:"KI-Assistentin von Veneiatech",hello:"Hallo! Ich bin Lina, die KI-Assistentin von Veneiatech. Wie kann ich Ihnen helfen?",ph:"Ihre Nachricht …",send:"Senden",close:"Schließen",note:'Lina ist eine KI und kann Fehler machen. Bitte geben Sie keine sensiblen Daten ein. <a href="#datenschutz">Datenschutz</a>',err:"Lina ist gerade nicht erreichbar. Schreiben Sie uns gern an info@veneiatech.de."},
+ es:{launch:"Chatea con Lina",sub:"Asistente de IA de Veneiatech",hello:"¡Hola! Soy Lina, la asistente de IA de Veneiatech. ¿En qué te puedo ayudar?",ph:"Tu mensaje…",send:"Enviar",close:"Cerrar",note:'Lina es una IA y puede equivocarse. No introduzcas datos sensibles. <a href="#datenschutz">Privacidad</a>',err:"Lina no está disponible ahora. Escríbenos a info@veneiatech.de."},
+ en:{launch:"Chat with Lina",sub:"Veneiatech's AI assistant",hello:"Hi! I'm Lina, Veneiatech's AI assistant. How can I help you?",ph:"Your message…",send:"Send",close:"Close",note:'Lina is an AI and can make mistakes. Please do not enter sensitive data. <a href="#datenschutz">Privacy</a>',err:"Lina is not available right now. Please write to info@veneiatech.de."},
+ ar:{launch:"تحدّث مع لينا",sub:"مساعدة الذكاء الاصطناعي في Veneiatech",hello:"مرحبًا! أنا لينا، مساعدة الذكاء الاصطناعي في Veneiatech. كيف يمكنني مساعدتك؟",ph:"رسالتك…",send:"إرسال",close:"إغلاق",note:'لينا ذكاء اصطناعي وقد تخطئ. يُرجى عدم إدخال بيانات حساسة. <a href="#datenschutz">الخصوصية</a>',err:"لينا غير متاحة حاليًا. راسلنا على info@veneiatech.de."},
+ zh:{launch:"与 Lina 聊天",sub:"Veneiatech 的 AI 助手",hello:"您好！我是 Lina，Veneiatech 的 AI 助手。有什么可以帮您？",ph:"您的消息…",send:"发送",close:"关闭",note:'Lina 是 AI，可能会出错。请勿输入敏感信息。<a href="#datenschutz">隐私</a>',err:"Lina 暂时无法使用。请发送邮件至 info@veneiatech.de。"}
+};
+const $=id=>document.getElementById(id);
+const launch=$("lina-launch"),panel=$("lina-panel"),box=$("lina-msgs"),form=$("lina-form"),input=$("lina-in"),sendBtn=$("lina-send");
+const lang=()=>{const l=(document.documentElement.lang||"de").slice(0,2);return TX[l]?l:"de"};
+const store={get(k){try{return JSON.parse(sessionStorage.getItem(k))}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const newId=()=>(window.crypto&&crypto.randomUUID)?crypto.randomUUID():"s-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+let sid=store.get("lina_sid");if(!sid||!/^[A-Za-z0-9-]{8,64}$/.test(sid)){sid=newId();store.set("lina_sid",sid)}
+let hist=store.get("lina_hist")||[];let busy=false;
+const esc=s=>s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const linkify=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"$1").replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g,'<a href="mailto:$1">$1</a>');
+function bubble(text,who){const d=document.createElement("div");d.className="lina-m "+who;d.innerHTML=linkify(text);box.appendChild(d);box.scrollTop=box.scrollHeight}
+function render(){box.innerHTML="";bubble(TX[lang()].hello,"bot");hist.forEach(m=>bubble(m.t,m.w))}
+function texts(){const t=TX[lang()];$("lina-launch-t").textContent=t.launch;$("lina-sub").textContent=t.sub;input.placeholder=t.ph;sendBtn.setAttribute("aria-label",t.send);$("lina-close").setAttribute("aria-label",t.close);$("lina-note").innerHTML=t.note;panel.dir=document.documentElement.dir||"ltr";if(!busy)render()}
+function open(o){panel.hidden=false;requestAnimationFrame(()=>panel.classList.toggle("open",o));launch.setAttribute("aria-expanded",o);document.body.classList.toggle("lina-open",o);if(o){texts();setTimeout(()=>input.focus(),150)}else{setTimeout(()=>{if(!panel.classList.contains("open"))panel.hidden=true},260)}}
+launch.addEventListener("click",()=>open(!panel.classList.contains("open")));
+$("lina-close").addEventListener("click",()=>open(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&panel.classList.contains("open"))open(false)});
+$("lina-note").addEventListener("click",e=>{if(e.target.tagName==="A")open(false)});
+input.addEventListener("input",()=>{input.style.height="auto";input.style.height=Math.min(input.scrollHeight,110)+"px"});
+input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
+form.addEventListener("submit",e=>{e.preventDefault();const msg=input.value.trim();if(!msg||busy)return;
+ busy=true;sendBtn.disabled=true;input.value="";input.style.height="auto";
+ hist.push({w:"me",t:msg});store.set("lina_hist",hist);bubble(msg,"me");
+ const ty=document.createElement("div");ty.className="lina-typing";ty.innerHTML="<i></i><i></i><i></i>";box.appendChild(ty);box.scrollTop=box.scrollHeight;
+ const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),45000);
+ fetch(EP,{method:"POST",body:new URLSearchParams({sessionId:sid,message:msg,lang:lang()}),signal:ctl.signal})
+  .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  .then(j=>{const t=(j&&typeof j.reply==="string"&&j.reply.trim())?j.reply.trim():TX[lang()].err;hist.push({w:"bot",t});store.set("lina_hist",hist);ty.remove();bubble(t,"bot")})
+  .catch(()=>{ty.remove();bubble(TX[lang()].err,"bot")})
+  .finally(()=>{clearTimeout(tm);busy=false;sendBtn.disabled=false;input.focus()});
+});
+new MutationObserver(()=>{texts()}).observe(document.documentElement,{attributes:true,attributeFilter:["lang","dir"]});
+texts();
+})();
+</script>
+<!-- ============ /Lina ============ -->
+
 </body>
 </html>
