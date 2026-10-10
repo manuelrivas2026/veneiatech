@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Veneiatech – Weiterleitung</title>
+  <style>
+    :root { --bg:#0b1020; --fg:#e8ecff; --acc:#4f6bff; }
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+           background:var(--bg); color:var(--fg); font-family:system-ui, sans-serif; text-align:center; padding:16px; }
+    a { color:var(--acc); }
+    .dot { width:14px; height:14px; border-radius:50%; background:var(--acc); margin:0 auto 16px;
+           animation:p 1s infinite ease-in-out; }
+    @keyframes p { 50% { transform:scale(1.6); opacity:.4; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="dot"></div>
+    <p>Einen Moment …</p>
+    <p><a id="link" href="https://veneiatech.de/">Weiter</a></p>
+  </main>
+
+  <script>
+    // Si el código no existe o está vacío, la tarjeta lleva aquí:
+    var RESPALDO = "https://veneiatech.de/";
+
+    var yaRedirigido = false;
+    function ir(url) {
+      if (yaRedirigido) return;
+      yaRedirigido = true;
+      document.getElementById("link").href = url;
+      location.replace(url);
+    }
+
+    // Código de la tarjeta: veneiatech.de/r/?c=001
+    var codigo = (new URLSearchParams(location.search).get("c") || "").replace(/[^0-9a-zA-Z_-]/g, "");
+
+    // Si internet va lento, a los 5 segundos va al respaldo
+    setTimeout(function () { ir(RESPALDO); }, 5000);
+
+    // Lee destinos.json siempre fresco (sin caché) para que los cambios se vean en 1–2 min
+    fetch("destinos.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (destinos) {
+        var url = (destinos[codigo] || "").trim();
+        ir(/^https:\/\//.test(url) ? url : RESPALDO);
+      })
+      .catch(function () { ir(RESPALDO); });
+  </script>
+</body>
+</html>
